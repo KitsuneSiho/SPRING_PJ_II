@@ -13,15 +13,11 @@
         <property name="password" value="q123"/>
     </bean>
 
-    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
-          destroy-method="close">
-        <constructor-arg ref="hikariConfig" />
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <constructor-arg ref="hikariConfig"/>
     </bean>
-
     <mybatis-spring:scan base-package="kr.bit.mapper"/>
-
     <bean class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
+        <property name="dataSource" ref="dataSource"/>
     </bean>
-
 </beans>
