@@ -49,6 +49,13 @@ public class BoardController{
 		Board vo=boardMapper.boardContent(idx);
 		return vo;  //{idx:2,title:w,content:33....}
 	}
+	
+	@RequestMapping("/boardCount")
+	public @ResponseBody Board boardCount(int idx) {
+		boardMapper.boardCount(idx);
+		Board vo=boardMapper.boardContent(idx);
+		return vo;
+	}
 }
 
 

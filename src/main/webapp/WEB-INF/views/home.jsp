@@ -19,7 +19,7 @@
 	function loadBoard() {
 
 		$.ajax({
-			url : "boardList",
+			url : "board/list",
 			type : "get",
 			dataType : "json",
 			success : make,
@@ -97,9 +97,12 @@
 		let content=$("#ta"+idx).val();
 		
 		$.ajax({
-			url: "boardUpdate",
-			type: "post",
-			data: {"idx":idx, "title":title, "content":content},  //수정해서 가지고 갈 값
+			url: "board/update",
+			type: "put",
+			//여러개의 값을 json형식으로 컨트롤러에 보낼 때 json.stringify 로 변환해서 전달해야함
+			//그걸 컨트롤러에서 받을 때 @RequestBody를 통해 받음
+			contentType: 'application/json;charset=uft-8',
+			data: JSON.stringify({"idx":idx, "title":title, "content":content}),  //수정해서 가지고 갈 값
 			success: loadBoard,
 			error : function() {
 				alert("error");
@@ -109,8 +112,8 @@
 
 	function goDelete(idx) {
 		$.ajax({
-			url : "boardDelete",
-			type : "get", //post방식으로 /boardInsert로 매핑
+			url : "board/"+idx,
+			type : "delete", //post방식으로 /boardInsert로 매핑
 			data : {
 				"idx" : idx
 			}, //삭제할 글번호를 서버에 전달
@@ -127,7 +130,7 @@
 		var formData = $("#frm").serialize();
 
 		$.ajax({
-			url : "boardInsert",
+			url : "board/create",
 			type : "post", //post방식으로 /boardInsert로 매핑
 			data : formData, //내가 폼에 입력한 데이터를 서버로 전달
 			success : loadBoard,
@@ -142,20 +145,34 @@
 		if ($("#con" + idx).css("display") == "none") { //내용폼이 안보이는 상황이면
 			
 			$.ajax({
-				url: "boardContent",
+				url: "board/"+idx,
 				type: "get",
 				data: {"idx":idx},
 				dataType: "json",
 				success: function(data){
-					$("#ta"+idx).val(data.content);
+					$("#ta"+idx).val(data.content); //textarea에 내용 띄움
 				},
 				error : function() {
 					alert("error");
 				}
 			});
 			$("#con" + idx).css("display", "table-row"); //제목누르면 폼이 보인다 
-		} else { //내용 폼이 보이면 
+			
+		} else { //내용 폼이 보이면 -> 제목클릭함 -> 조회수 증가
 			$("#con" + idx).css("display", "none"); //제목누르면 안보이게
+			
+			$.ajax({
+				url: "board/count/"+idx,
+				type: "put",
+				data: {"idx":idx},
+				dataType: "json",
+				success: function(data){
+					$("#cnt"+idx).text(data.count); //조회수 폼에 Board객체에 있는(data) 조회수 출력
+				},
+				error : function() {
+					alert("error");
+				}
+			});
 		}
 
 	}
