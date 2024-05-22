@@ -14,6 +14,14 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript">
+$(document).ready(function(){
+	
+	if(${!empty msg1}){
+		$("#msgType").attr("class","modal-content panel-warning");
+		$("#failModal").modal("show");
+	}	
+});
+
 function doubleCheck(){
 	
 	let memberID=$("#memberID").val();  //폼에서 적은 id값 가져오기
@@ -38,6 +46,32 @@ function doubleCheck(){
 		}
 	});
 }
+
+function goInsert(){
+	
+	let memberAge=$("#memberAge").val();
+	if(memberAge==0 || memberAge==""){
+		alert("나이 입력하세요!");
+		return false;
+	}
+	document.frm.submit();  //서버에 전송
+}
+
+function passwordCheck(){
+	
+	let memberPw1=$("#memberPw1").val();
+	let memberPw2=$("#memberPw2").val();
+	
+	if(memberPw1 != memberPw2){
+		$("#passMessage").html("비밀번호가 일치하지 않습니다");
+	}
+	else{   //(비번, 비번확인이 일치한다면)
+		$("#passMessage").html("비밀번호가 일치합니다").css("color", "yellowgreen");
+		$("#memberPw").val(memberPw1); //히든 value값에 비번 넣음
+		
+	}
+}
+
 </script>
 </head>
 <body>
@@ -61,7 +95,7 @@ function doubleCheck(){
 							<td style="width: 100px; vertical-align: middle;" />비밀번호
 							</td>
 							<td colspan="2"><input class="form-control" type="password"
-								id="memberPw" name="memberPw" onkeyup="passwordCheck()"
+								id="memberPw1" name="memberPw1" onkeyup="passwordCheck()"
 								placeholder="비밀번호를 입력" /></td>
 						</tr>
 
@@ -96,7 +130,7 @@ function doubleCheck(){
 										value="남자" checked />남자 <input type="radio"
 										name="memberGender" autocomplete="off" value="여자" />여자
 								</div>
-
+								</div>
 							</td>
 						</tr>
 
@@ -137,6 +171,31 @@ function doubleCheck(){
 					</div>
 				</div>
 			</div>
+			
+			<!-- 실패 -->
+			<div class="modal fade" id="failModal" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content" id="msgType">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h3>${msg1 }</h3>
+						</div>
+						<div class="modal-body">
+							<p>${msg2 }</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+			
+			
+			
+			
 			</div>
 			</div>
 </body>

@@ -13,7 +13,6 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-	
 <script type="text/javascript">
 $(document).ready(function(){
 	
@@ -24,38 +23,37 @@ $(document).ready(function(){
 });
 </script>
 </head>
+
 <body>
 	<div class="container">
-		<jsp:include page="include/top.jsp" />
+		<jsp:include page="../include/top.jsp" />
 		<div class="panel panel-default">
+			<div class="panel-heading">로그인</div>
 			<div class="panel-body">
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#home">Home</a></li>
-					<li><a href="MainBoard">게시판</a></li>
-					<li><a href="#" data-toggle="tab" >공지</a></li>
-				</ul>
-				
-				<div class="tab-content">
-					 <div class="tab-pane fade show active" id="home">
-					 	<h4>Home</h4>
-					 	<p>content</p>
-					 </div>
-					 
-					 <div class="tab-pane fade" id="home1">
-					 	<h4>게시판</h4>
-					 	<p>content</p>
-					 </div>
-					 
-					 <div class="tab-pane fade" id="home2">
-					 	<h4>공지</h4>
-					 	<p>content</p>
-					 </div>
-				</div>
+				<form action="${root }/memberLogin" method="post">
+					<table class='table table-bordered' style="text-align: center;">
+						<tr>
+							<td style="width: 100px; vertical-align: middle;">아이디</td>
+							<td><input type="text" class="form-control" id="memberID"
+								name="memberID" placeholder="아이디 입력" /></td>
+						</tr>
+
+						<tr>
+							<td style="width: 100px; vertical-align: middle;" />비밀번호
+							</td>
+							<td colspan="2"><input class="form-control" type="password"
+								id="memberPw" name="memberPw" placeholder="비밀번호를 입력" /></td>
+						</tr>
+
+						<tr>
+							<td colspan="2"><input type="submit"
+								class="btn btn-primary btn-sm pull-right" value="로그인"></td>
+						</tr>
+					</table>
+				</form>
 			</div>
-		</div>
-	</div>
-	
-	<!-- 실패 -->
+			
+		<!--모달-->
 			<div class="modal fade" id="failModal" role="dialog">
 				<div class="modal-dialog">
 					<div class="modal-content" id="msgType">
@@ -73,17 +71,8 @@ $(document).ready(function(){
 					</div>
 				</div>
 			</div>
+
+		</div>
+	</div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
