@@ -23,11 +23,14 @@
 				<!-- 회원정보 비어있을 경우 -->
 				<ul class="nav navbar-nav">
 					<li class="dropdown"><a class="dropdown-toggle" href="#"
-						data-toggle="dropdown"> 클릭! </a>
+						data-toggle="dropdown">클릭!</a>
 						<ul class="dropdown-menu dropdown-menu-dark">
-							<li><a class="dropdown-item" href="${root }/memberLoginForm">로그인 </a></li>
-							<li><a class="dropdown-item" href="${root }/memberJoin">회원가입</a></li>
-						</ul></li>
+							<li><a class="dropdown-item" href="${root }/memberLoginForm">
+								<span class="glyphicon glyphicon-heart">로그인</span> </a></li>
+							<li><a class="dropdown-item" href="${root }/memberJoin">
+								<span class="glyphicon glyphicon-user">회원가입</span>
+							</a></li>
+						</ul>
 				</ul>
 			</c:if>
 
@@ -37,13 +40,12 @@
 						data-toggle="dropdown"> 클릭! </a>
 						<ul class="dropdown-menu dropdown-menu-dark">
 							<li><a class="dropdown-item" href="${root }/memberUpdateForm">
-								<span class="glyphicon glyphicon-check">회원수정</span>
-							</a></li>
+								<span class="glyphicon glyphicon-check">회원수정</span></a></li>
 							<li><a class="dropdown-item" href="${root }/memberImageForm">
-								<span class="glyphicon glyphicon-picture">사진</span>
-							</a></li>
+								<span class="glyphicon glyphicon-picture">사진</span></a></li>
 							<li><a class="dropdown-item" href="${root }/memberLogout">
-							<span class="glyphicon glyphicon-log-out">로그아웃</span></a></li>
+								<span class="glyphicon glyphicon-log-out">로그아웃</span>
+							</a></li>
 						</ul></li>
 				</ul>
 			</c:if>

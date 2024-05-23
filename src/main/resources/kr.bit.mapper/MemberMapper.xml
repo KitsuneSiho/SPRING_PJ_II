@@ -28,6 +28,21 @@
 		memberEmail=#{memberEmail}
 		where memberID=#{memberID}
 	</update>
+	
+	<select id="getMember" resultType="kr.bit.entity.Member">
+		select * from member_table where memberID=#{memberID}
+	</select>
 
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
 

@@ -36,10 +36,17 @@ function passwordCheck(){
 		
 	}
 }
-function goUpdate(){
-	let memberAge
-}
 
+function goUpdate(){
+	
+	let memberAge=$("#memberAge").val();
+	if(memberAge==0 || memberAge==""){
+		alert("나이 입력하세요!");
+		return false;
+	}
+	document.frm.submit();  //서버에 전송
+	
+}
 </script>
 </head>
 <body>
@@ -103,6 +110,7 @@ function goUpdate(){
 										<input type="radio"
 										name="memberGender" autocomplete="off" value="여자" 
 										<c:if test="${memberVo.memberGender eq '여자'}">checked</c:if> />여자
+								</div>
 								</div>
 							</td>
 						</tr>
@@ -170,4 +178,5 @@ function goUpdate(){
 
 
 		</div>
+	</div>
 </body>

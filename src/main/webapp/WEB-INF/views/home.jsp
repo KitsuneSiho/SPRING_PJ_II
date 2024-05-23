@@ -32,14 +32,22 @@ $(document).ready(function(){
 		</c:if>
 
 		<c:if test="${!empty memberVo }">
+			<c:if test="${memberVo.memberProfile eq '' }">
+				<img src="${root }/resources/images/empty_profile.png"
+					style="width: 50px; height: 50px;" />
+			</c:if>
+			<c:if test="${memberVo.memberProfile ne '' }">
+				<img src="${root }/resources/upload/${memberVo.memberProfile}"
+					style="width: 50px; height: 50px;" />
+			</c:if>
 			<h3>${memberVo.memberName }님 환영합니다!</h3>
 		</c:if>
-		
 		<div class="panel panel-default">
 			<div>
-				<img src="${root }/spring.png" style="width:100%; height:500px;">
+				<img src="${root }/resources/images/spring.png"
+					style="width: 100%; height: 500px;">
 			</div>
-		
+
 			<div class="panel-body">
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#home">Home</a></li>
