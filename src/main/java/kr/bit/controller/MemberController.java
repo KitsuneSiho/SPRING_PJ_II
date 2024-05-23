@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.fasterxml.jackson.databind.deser.std.MapEntryDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -211,6 +212,16 @@ public class MemberController {
 				return "redirect:/memberImageForm";
 			}
 		}
-		return "";
+		Member member=new Member();
+		member.setMemberID(memberID);
+		member.setMemberProfile(newProfile);
+		memberMapper.memberProfileUpdate(member);//id기준으로 사진 업데이트 됨
+
+		Member m = memberMapper.getMember(memberID);
+		session.setAttribute("memberVo", m);
+		rttr.addFlashAttribute("msg1", "성공");
+		rttr.addFlashAttribute("msg2", "업로드 되었습니다");
+
+		return "redirect:/";
 	}
 }

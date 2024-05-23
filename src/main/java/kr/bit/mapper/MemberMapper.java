@@ -16,5 +16,7 @@ public interface MemberMapper {
 	public int memberUpdate(Member memberVo);
 	
 	public Member getMember(String memberID);
+
+	public void memberProfileUpdate(Member memberVo);//id기준으로 사진변경
 	
 }
