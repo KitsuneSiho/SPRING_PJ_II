@@ -157,4 +157,8 @@ public class MemberController {
 			return "redirect:/memberUpdateForm";
 		}
 	}
+	@RequestMapping("/memberImageForm")
+	public String memberImageForm() {
+		return "member/memberImageForm";
+	}
 }

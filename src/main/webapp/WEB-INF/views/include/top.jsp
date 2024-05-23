@@ -36,9 +36,14 @@
 					<li class="dropdown"><a class="dropdown-toggle" href="#"
 						data-toggle="dropdown"> 클릭! </a>
 						<ul class="dropdown-menu dropdown-menu-dark">
-							<li><a class="dropdown-item" href="${root }/memberUpdateForm">회원수정</a></li>
-							<li><a class="dropdown-item" href="#">사진</a></li>
-							<li><a class="dropdown-item" href="${root }/memberLogout">로그아웃</a></li>
+							<li><a class="dropdown-item" href="${root }/memberUpdateForm">
+								<span class="glyphicon glyphicon-check">회원수정</span>
+							</a></li>
+							<li><a class="dropdown-item" href="${root }/memberImageForm">
+								<span class="glyphicon glyphicon-picture">사진</span>
+							</a></li>
+							<li><a class="dropdown-item" href="${root }/memberLogout">
+							<span class="glyphicon glyphicon-log-out">로그아웃</span></a></li>
 						</ul></li>
 				</ul>
 			</c:if>
