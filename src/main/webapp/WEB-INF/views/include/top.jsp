@@ -47,14 +47,14 @@
 							<c:if test="${!empty memberVo}">
 								<c:if test="${memberVo.memberProfile eq null }">
 									<li><img src="${root }/resources/images/empty_profile.png"
-										style="width: 50px; height: 50px;" /> ${memberVo.memberName}님
+										style="width: 50px; height: 50px; margin: 2px" /> ${memberVo.memberName}님
 										안녕하세요~</li>
 								</c:if>
 
 								<c:if test="${memberVo.memberProfile ne null }">
 									<li><img
 										src="${root }/resources/upload/${memberVo.memberProfile}"
-										style="width: 50px; height: 50px;" /> ${memberVo.memberName}님
+										style="width: 50px; height: 50px; margin: 2px" /> ${memberVo.memberName}님
 										안녕하세요~</li>
 								</c:if>
 							</c:if>

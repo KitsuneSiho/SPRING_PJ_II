@@ -45,7 +45,7 @@ $(document).ready(function(){
 		<div class="panel panel-default">
 			<div>
 				<img src="${root }/resources/images/spring.png"
-					style="width: 100%; height: 500px;">
+					style="width: 100%; height: 500px; border-radius: 20px">
 			</div>
 
 			<div class="panel-body">
