@@ -21,43 +21,45 @@
 
 			<c:if test="${empty memberVo }">
 				<!-- 회원정보 비어있을 경우 -->
-				<ul class="nav navbar-nav">
-					<li class="dropdown"><a class="dropdown-toggle" href="#"
-						data-toggle="dropdown">클릭!</a>
-						<ul class="dropdown-menu dropdown-menu-dark">
-							<li><a class="dropdown-item" href="${root }/memberLoginForm">
-								<span class="glyphicon glyphicon-heart">로그인</span> </a></li>
-							<li><a class="dropdown-item" href="${root }/memberJoin">
-								<span class="glyphicon glyphicon-user">회원가입</span>
-							</a></li>
-						</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="${root }/memberLoginForm"> <span
+							class="glyphicon glyphicon-heart">로그인</span>
+					</a></li>
+
+					<li><a href="${root }/memberJoin"> <span
+							class="glyphicon glyphicon-user">회원가입</span>
+					</a></li>
 				</ul>
 			</c:if>
 
 			<c:if test="${!empty memberVo }">
-				<ul class="nav navbar-nav">
-					<li class="dropdown"><a class="dropdown-toggle" href="#"
-						data-toggle="dropdown"> 클릭! </a>
-						<ul class="dropdown-menu dropdown-menu-dark">
-							<li><a class="dropdown-item" href="${root }/memberUpdateForm">
-								<span class="glyphicon glyphicon-check">회원수정</span></a></li>
-							<li><a class="dropdown-item" href="${root }/memberImageForm">
-								<span class="glyphicon glyphicon-picture">사진</span></a></li>
-							<li><a class="dropdown-item" href="${root }/memberLogout">
-								<span class="glyphicon glyphicon-log-out">로그아웃</span>
+				<ul class="nav navbar-nav navbar-right">
+							<li><a 
+								href="${root }/memberUpdateForm"> <span
+									class="glyphicon glyphicon-check">회원수정</span></a></li>
+							<li><a href="${root }/memberImageForm">
+									<span class="glyphicon glyphicon-picture">사진</span>
 							</a></li>
-						</ul></li>
-				</ul>
+							<li><a href="${root }/memberLogout">
+									<span class="glyphicon glyphicon-log-out">로그아웃</span>
+							</a></li>
+
+							<c:if test="${!empty memberVo}">
+								<c:if test="${memberVo.memberProfile eq null }">
+									<li><img src="${root }/resources/images/empty_profile.png"
+										style="width: 50px; height: 50px;" /> ${memberVo.memberName}님
+										안녕하세요~</li>
+								</c:if>
+
+								<c:if test="${memberVo.memberProfile ne null }">
+									<li><img
+										src="${root }/resources/upload/${memberVo.memberProfile}"
+										style="width: 50px; height: 50px;" /> ${memberVo.memberName}님
+										안녕하세요~</li>
+								</c:if>
+							</c:if>
+						</ul>
 			</c:if>
-
-
-
-
-
-
-
-
-
 		</div>
 	</div>
 </nav>

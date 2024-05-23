@@ -55,20 +55,38 @@
 							li += "<td>내용</td>";
 							li += "<td colspan='4'>";
 							li += "<textarea id='ta"+obj.idx+"' readonly rows='7' class='form-control'></textarea>";
-							li += "<br/>";
-							li += "<span id='up"+obj.idx+"'><button class='btn btn-success btn-sm' onclick='goUpdateForm("
+							
+							if("${memberVo.memberID}" == obj.memberID){
+							
+								li += "<br/>";
+								li += "<span id='up"+obj.idx+"'><button class='btn btn-success btn-sm' onclick='goUpdateForm("
 									+ obj.idx + ")'>수정화면</button></span>&nbsp;";
-							li += "<button class='btn btn-danger btn-sm' onclick='goDelete("
+								li += "<button class='btn btn-danger btn-sm' onclick='goDelete("
 									+ obj.idx + ")'>삭제</button>";
+							}
+							
+							else{
+								li += "<br/>";
+								li += "<span id='up"+obj.idx+"'><button disabled class='btn btn-success btn-sm' onclick='goUpdateForm("
+									+ obj.idx + ")'>수정화면</button></span>&nbsp;";
+								li += "<button disabled class='btn btn-danger btn-sm' onclick='goDelete("
+									+ obj.idx + ")'>삭제</button>";
+								
+							}
+							
 							li += "</td>";
 							li += "</tr>";
 
 						});
-		li += "<tr>";
-		li += "<td colspan='5'>";
-		li += "<button class='btn btn-primary btn-sm' onclick='getForm()'>글작성</button>";
-		li += "</td>";
-		li += "</tr>";
+		
+		//로그인이 안되어있으면 글작성버튼이 안보임
+		if(${!empty memberVo}){  
+			li += "<tr>";
+			li += "<td colspan='5'>";
+			li += "<button class='btn btn-primary btn-sm' onclick='getForm()'>글작성</button>";
+			li += "</td>";
+			li += "</tr>";
+		}
 		li += "</table>";
 		$("#view").html(li);
 
@@ -134,7 +152,7 @@
 			type : "post", //post방식으로 /boardInsert로 매핑
 			data : formData, //내가 폼에 입력한 데이터를 서버로 전달
 			success : loadBoard,
-			//서버와의 통신이 성공되면 loadBoard메서들 호출 -> 내가 쓴거 테이블형식으로 출력
+			//서버와의 통신이 성공되면 loadBoard메서드 호출 -> 내가 쓴거 테이블형식으로 출력
 			error : function() {
 				alert("error");
 			}
@@ -197,6 +215,7 @@
 			<div class="panel-body" id="view">본문</div>
 			<div class="panel-body" id="wfrom">
 				<form id="frm">
+				<input type="hidden" name="memberID" value="${memberVo.memberID }"/>
 					<table class="table">
 						<tr>
 							<td>제목</td>
@@ -211,7 +230,8 @@
 						<tr>
 							<td>글쓴이</td>
 							<td><input type="text" id="writer" name="writer"
-								class="form-control" /></td>
+								class="form-control" value=${memberVo.memberName } 
+								readonly="readonly"/></td>
 						</tr>
 						<tr>
 							<td colspan="2" align="center">

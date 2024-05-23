@@ -32,7 +32,7 @@
 	<select id="getMember" resultType="kr.bit.entity.Member">
 		select * from member_table where memberID=#{memberID}
 	</select>
-
+	
 	<update id="memberProfileUpdate" parameterType="kr.bit.entity.Member">
 		update member_table set memberProfile=#{memberProfile} where memberID=#{memberID}
 	</update>

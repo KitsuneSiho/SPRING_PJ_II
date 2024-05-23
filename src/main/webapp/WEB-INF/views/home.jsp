@@ -31,7 +31,7 @@ $(document).ready(function(){
 			<h3>Spring Legacy</h3>
 		</c:if>
 
-		<c:if test="${!empty memberVo }">
+		<%-- <c:if test="${!empty memberVo }">
 			<c:if test="${memberVo.memberProfile eq '' }">
 				<img src="${root }/resources/images/empty_profile.png"
 					style="width: 50px; height: 50px;" />
@@ -41,7 +41,7 @@ $(document).ready(function(){
 					style="width: 50px; height: 50px;" />
 			</c:if>
 			<h3>${memberVo.memberName }님 환영합니다!</h3>
-		</c:if>
+		</c:if> --%>
 		<div class="panel panel-default">
 			<div>
 				<img src="${root }/resources/images/spring.png"
