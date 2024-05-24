@@ -55,7 +55,7 @@ function goUpdate(){
 		<div class="panel panel-default">
 			<div class="panel-heading">회원정보 수정</div>
 			<div class="panel-body">
-				<form name="frm" action="${root }/memberUpdate" method="post">
+				<form name="frm" action="${root }/memberUpdate?${_csrf.parameterName}=${_csrf.token}" method="post">
 					<input type="hidden" id="memberID" name="memberID" value="${memberVo.memberID }" />	
 					<input type="hidden" id="memberPw" name="memberPw" value="" />
 					<table class='table table-bordered' style="text-align: center;">
@@ -131,6 +131,7 @@ function goUpdate(){
 						</tr>
 
 					</table>
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				</form>
 			</div>
 

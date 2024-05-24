@@ -69,6 +69,7 @@ public class MemberController {
 			rttr.addFlashAttribute("msg1", "성공");
 			rttr.addFlashAttribute("msg2", "회원가입에 성공했습니다");
 
+
 			session.setAttribute("memberVo", member);
 
 			return "redirect:/";
@@ -152,7 +153,9 @@ public class MemberController {
 			rttr.addFlashAttribute("msg1", "성공");
 			rttr.addFlashAttribute("msg2", "회원 수정에 성공했습니다");
 
-			session.setAttribute("memberVo", member);
+			//회원정보 수정후 수정된 데이터로 다시 불러오기
+			Member memberVo=memberMapper.getMember(member.getMemberID());
+			session.setAttribute("memberVo", memberVo);
 			// 수정된 데이터들을 세션영역 memberVo에 담아서 redirect로 화면이동
 
 			return "redirect:/";

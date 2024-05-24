@@ -30,7 +30,7 @@ $(document).ready(function(){
 		<div class="panel panel-default">
 			<div class="panel-heading">사진 등록</div>
 			<div class="panel-body">
-				<form action="${root }/memberImageUpdate" method="post" enctype="multipart/form-data">
+				<form action="${root }/memberImageUpdate?${_csrf.parameterName}=${_csrf.token}" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="memberID" value="${memberVo.memberID }">
 					<table class='table table-bordered' style="text-align: center;">
 						<tr>
@@ -53,6 +53,7 @@ $(document).ready(function(){
 								class="btn btn-primary btn-sm pull-right" value="사진 등록"></td>
 						</tr>
 					</table>
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				</form>
 			</div>
 			

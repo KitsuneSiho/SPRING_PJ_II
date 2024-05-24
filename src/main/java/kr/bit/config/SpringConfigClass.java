@@ -23,7 +23,7 @@ public class SpringConfigClass extends AbstractAnnotationConfigDispatcherServlet
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
 		// TODO Auto-generated method stub
-		return new Class[] {RootAppContext.class};
+		return new Class[] {RootAppContext.class, SecurityConfig.class};
 	}
 	
 	
