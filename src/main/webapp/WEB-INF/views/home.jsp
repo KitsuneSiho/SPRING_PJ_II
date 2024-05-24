@@ -33,7 +33,7 @@ $(document).ready(function(){
 
 		<%-- <c:if test="${!empty memberVo }">
 			<c:if test="${memberVo.memberProfile eq '' }">
-				<img src="${root }/resources/images/empty_profile.png"
+				<img src="${root }/resources/images/짱구.jpg"
 					style="width: 50px; height: 50px;" />
 			</c:if>
 			<c:if test="${memberVo.memberProfile ne '' }">
@@ -45,7 +45,7 @@ $(document).ready(function(){
 		<div class="panel panel-default">
 			<div>
 				<img src="${root }/resources/images/spring.png"
-					style="width: 100%; height: 500px; border-radius: 20px">
+					style="width: 100%; height: 530px; border-radius: 25px; border: none;>
 			</div>
 
 			<div class="panel-body">

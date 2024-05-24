@@ -150,7 +150,11 @@ function passwordCheck(){
 						</tr>
 
 					</table>
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					<!-- parameterName에 token값(value)을 저장 -->
+					<input type="hidden" name="${_csrf.parameterName }" 
+					 value="${_csrf.token }"/>
+					 
+					
 				</form>
 			</div>
 				

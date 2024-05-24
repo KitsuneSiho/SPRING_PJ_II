@@ -13,6 +13,9 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript">
+var csrfHeaderName = "${_csrf.headerName}";
+var csrfTokenValue = "${_csrf.token}";
+
 	$(document).ready(function() {
 		loadBoard();
 	});
@@ -121,6 +124,9 @@
 			//그걸 컨트롤러에서 받을 때 @RequestBody를 통해 받음
 			contentType: 'application/json;charset=uft-8',
 			data: JSON.stringify({"idx":idx, "title":title, "content":content}),  //수정해서 가지고 갈 값
+			beforeSend: function(xhr){ 
+				xhr.setRequestHeader(csrfHeaderName,csrfTokenValue)
+			},
 			success: loadBoard,
 			error : function() {
 				alert("error");
@@ -135,6 +141,9 @@
 			data : {
 				"idx" : idx
 			}, //삭제할 글번호를 서버에 전달
+			beforeSend: function(xhr){ 
+				xhr.setRequestHeader(csrfHeaderName,csrfTokenValue)
+			},
 			success : loadBoard,
 			//서버와의 통신이 성공되면 loadBoard메서들 호출 -> 삭제한 후의 결과를 테이블형식으로 출력
 			error : function() {
@@ -151,8 +160,11 @@
 			url : "board/create",
 			type : "post", //post방식으로 /boardInsert로 매핑
 			data : formData, //내가 폼에 입력한 데이터를 서버로 전달
+			beforeSend: function(xhr){ 
+				xhr.setRequestHeader(csrfHeaderName,csrfTokenValue)
+			},
 			success : loadBoard,
-			//서버와의 통신이 성공되면 loadBoard메서드 호출 -> 내가 쓴거 테이블형식으로 출력
+			//서버와의 통신이 성공되면 loadBoard메서들 호출 -> 내가 쓴거 테이블형식으로 출력
 			error : function() {
 				alert("error");
 			}
@@ -184,6 +196,9 @@
 				type: "put",
 				data: {"idx":idx},
 				dataType: "json",
+				beforeSend: function(xhr){ 
+					xhr.setRequestHeader(csrfHeaderName,csrfTokenValue)
+				},
 				success: function(data){
 					$("#cnt"+idx).text(data.count); //조회수 폼에 Board객체에 있는(data) 조회수 출력
 				},

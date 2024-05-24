@@ -53,7 +53,7 @@ $(document).ready(function(){
 								class="btn btn-primary btn-sm pull-right" value="사진 등록"></td>
 						</tr>
 					</table>
-					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					
 				</form>
 			</div>
 			
