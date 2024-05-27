@@ -5,14 +5,4 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
   </component>
-  <component name="FacetManager">
-    <facet type="Spring" name="Spring">
-      <configuration>
-        <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/src/main/java/kr/bit/config/RootAppContext.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/kr/bit/config/ServletAppContext.java</file>
-        </fileset>
-      </configuration>
-    </facet>
-  </component>
 </module>

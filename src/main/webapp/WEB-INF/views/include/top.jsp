@@ -45,11 +45,11 @@
 							</a></li>
 
 							<c:if test="${!empty memberVo}">
-								 <c:if test="${empty memberVo.memberProfile }">
-									<li><img src="${root }/resources/images/empty_profile.png"
-										style="width: 50px; height: 50px; border-radius: 25px;" /> ${memberVo.memberName}님
+								 <%-- <c:if test="${empty memberVo.memberProfile }">
+									<li><img src="${root }/resources/images/짱구.jpg"
+										style="width: 50px; height: 50px;" /> ${memberVo.memberName}님
 										안녕하세요~</li>
-								</c:if>
+								</c:if>  --%>
 
 								<c:if test="${!empty memberVo.memberProfile }">
 									<li><img

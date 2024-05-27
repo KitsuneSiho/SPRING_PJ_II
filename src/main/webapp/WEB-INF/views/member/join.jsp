@@ -140,6 +140,16 @@ function passwordCheck(){
 								class="form-control" type="text" maxlength="20"
 								placeholder="이메일을 입력하세요." /></td>
 						</tr>
+						
+						<tr>
+							<td style="width: 100px; vertical-align: middle;">권한</td>
+								<td colspan="2">
+								<input type="checkbox" name="authLi[0].auth" value="ROLE_USER">USER
+								<input type="checkbox" name="authLi[1].auth" value="ROLE_MANAGER">MANAGER
+								<input type="checkbox" name="authLi[2].auth" value="ROLE_ADMIN">ADMIN
+								
+								
+						</tr>
 
 						<tr>
 							<td colspan="3" style="text-align: left;"><span

@@ -2,11 +2,13 @@ package kr.bit.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,13 +19,18 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import kr.bit.entity.Member;
+import kr.bit.entity.MemberAuth;
 import kr.bit.mapper.MemberMapper;
 
 @Controller
 public class MemberController {
 
+	
 	@Autowired
 	MemberMapper memberMapper;
+	
+	@Autowired
+	PasswordEncoder	passwordEncoder;
 
 	@RequestMapping("/memberJoin")
 	public String memberJoin() {
@@ -47,7 +54,7 @@ public class MemberController {
 
 		if (member.getMemberID().equals("") || memberPw1.equals("") || memberPw2.equals("")
 				|| member.getMemberName().equals("") || member.getMemberGender().equals("")
-				|| member.getMemberEmail().equals("")) {
+				|| member.getMemberEmail().equals("") || member.getAuthLi().size()==0) {
 
 			rttr.addFlashAttribute("msg1", "실패");
 			rttr.addFlashAttribute("msg2", "입력해주세요");
@@ -62,13 +69,29 @@ public class MemberController {
 			return "redirect:/memberJoin";
 		}
 
+		
+		String enPw=passwordEncoder.encode(member.getMemberPw());
+		member.setMemberPw(enPw);
+		
 		int result = memberMapper.register(member); // db에 회원정보 삽입
 		member.setMemberProfile("");
-
+		
 		if (result == 1) { // 1행 추가됨-> insert 성공 되면
+			//회원권한을 저장해야함
+			List<MemberAuth> list=member.getAuthLi();
+			for(MemberAuth mem : list) {
+				if(mem.getAuth()!=null) {
+					MemberAuth memberAuth=new MemberAuth();
+					memberAuth.setMemberID(member.getMemberID());
+					memberAuth.setAuth(mem.getAuth());
+					memberMapper.authInsert(memberAuth);
+				}
+			}
 			rttr.addFlashAttribute("msg1", "성공");
 			rttr.addFlashAttribute("msg2", "회원가입에 성공했습니다");
-
+			
+			//회원정보(member_security)+권한정보(member_auth)..
+			
 
 			session.setAttribute("memberVo", member);
 
@@ -153,7 +176,8 @@ public class MemberController {
 			rttr.addFlashAttribute("msg1", "성공");
 			rttr.addFlashAttribute("msg2", "회원 수정에 성공했습니다");
 
-			//회원정보 수정후 수정된 데이터로 다시 불러오기
+			//회원정보 수정을 한 후 다시 회원정보를 가져와서 세팅해줘야한다.
+			//session에 담은 객체에 사진이 안담겨있는 상태이므로 
 			Member memberVo=memberMapper.getMember(member.getMemberID());
 			session.setAttribute("memberVo", memberVo);
 			// 수정된 데이터들을 세션영역 memberVo에 담아서 redirect로 화면이동

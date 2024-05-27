@@ -8,34 +8,48 @@
 	</select>
 
 	<insert id="register" parameterType="kr.bit.entity.Member">
-		insert into
-		member_table(memberID,memberPw,memberName,memberAge,
-		memberGender,memberEmail,memberProfile)
-		values(#{memberID},#{memberPw},#{memberName},
-		#{memberAge},#{memberGender},#{memberEmail},#{memberProfile})
+		insert into member_security
+		(memberIdx,memberID,memberPw,memberName,memberAge,
+		 memberGender,memberEmail,memberProfile)
+		values((select
+					IFNULL(max(memberIdx)+1,1) from member_security mem),
+			   #{memberID},#{memberPw},#{memberName},
+			   #{memberAge},#{memberGender},#{memberEmail},#{memberProfile})
 	</insert>
 
 	<select id="memberLogin" parameterType="kr.bit.entity.Member"
-		resultType="kr.bit.entity.Member">
+			resultType="kr.bit.entity.Member">
 		select * from member_table where memberID=#{memberID} and
-		memberPw=#{memberPw}
+			memberPw=#{memberPw}
 	</select>
 
 	<update id="memberUpdate" parameterType="kr.bit.entity.Member">
 		update member_table
-		set memberPw=#{memberPw}, memberName=#{memberName},
-		memberAge=#{memberAge}, memberGender=#{memberGender},
-		memberEmail=#{memberEmail}
+		set
+			memberPw=#{memberPw}, memberName=#{memberName},
+			memberAge=#{memberAge}, memberGender=#{memberGender},
+			memberEmail=#{memberEmail}
 		where memberID=#{memberID}
 	</update>
-	
-	<select id="getMember" resultType="kr.bit.entity.Member">
-		select * from member_table where memberID=#{memberID}
+
+	<select id="getMember" resultType="memberMap">
+		select *from member_security
+						 mem
+						 left outer join member_auth auth
+										 on mem.memberID=auth.memberID
+		where mem.memberID=#{memberID}
 	</select>
-	
-	<update id="memberProfileUpdate" parameterType="kr.bit.entity.Member">
-		update member_table set memberProfile=#{memberProfile} where memberID=#{memberID}
+
+	<update id="memberProfileUpdate"
+			parameterType="kr.bit.entity.Member">
+		update member_table set memberProfile=#{memberProfile}
+		where memberID=#{memberID}
 	</update>
+
+	<insert id="authInsert" parameterType="kr.bit.entity.MemberAuth">
+		insert into
+			member_auth(memberID,auth) values (#{memberID},#{auth})
+	</insert>
 
 </mapper>
 

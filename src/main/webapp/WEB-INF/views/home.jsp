@@ -44,8 +44,8 @@ $(document).ready(function(){
 		</c:if> --%>
 		<div class="panel panel-default">
 			<div>
-				<img src="${root }/resources/images/spring.png"
-					style="width: 100%; height: 530px; border-radius: 25px; border: none;>
+				<img src="${root }/resources/images/dog.jpg"
+					style="width: 100%; height: 500px;">
 			</div>
 
 			<div class="panel-body">
