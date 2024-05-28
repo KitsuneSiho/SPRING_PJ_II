@@ -8,14 +8,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="controller" />
-        <module name="mvcproject" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="controller" options="-Xlint:all" />
-      <module name="mvcproject" options="-Xlint:all" />
     </option>
   </component>
 </project>
