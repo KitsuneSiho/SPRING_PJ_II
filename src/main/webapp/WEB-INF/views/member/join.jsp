@@ -130,7 +130,6 @@ function passwordCheck(){
 										value="남자" checked />남자 <input type="radio"
 										name="memberGender" autocomplete="off" value="여자" />여자
 								</div>
-								</div>
 							</td>
 						</tr>
 

@@ -12,7 +12,7 @@ public interface MemberMapper {
 	
 	public int register(Member member);
 	
-	public Member memberLogin(Member memberVo);
+	public Member memberLogin(String username);
 	
 	public int memberUpdate(Member memberVo);
 	
@@ -21,5 +21,7 @@ public interface MemberMapper {
 	public void memberProfileUpdate(Member memberVo); //id기준으로 사진변경
 	
 	public void authInsert(MemberAuth memberAuth);
+	
+	public void authDelete(String memberID);
 	
 }

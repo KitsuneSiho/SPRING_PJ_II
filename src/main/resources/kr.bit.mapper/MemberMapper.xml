@@ -2,6 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.bit.mapper.MemberMapper">
 
+	<resultMap type="kr.bit.entity.Member" id="memberMap">
+		<id property="memberIdx" column="memberIdx" />
+		<result property="memberID" column="memberID" />
+		<result property="memberPw" column="memberPw" />
+		<result property="memberName" column="memberName" />
+		<result property="memberAge" column="memberAge" />
+		<result property="memberGender" column="memberGender" />
+		<result property="memberEmail" column="memberEmail" />
+		<result property="memberProfile" column="memberProfile" />
+		<collection property="authLi" resultMap="authMap">  <!-- auth: 관리자, memberID:aa -->
+		</collection>
+	</resultMap>
+
+	<resultMap type="kr.bit.entity.MemberAuth" id="authMap">
+		<id property="num" column="num" />
+		<result property="memberID" column="memberID" />
+		<result property="auth" column="auth" />
+	</resultMap>
+
 	<select id="registerCheck" resultType="kr.bit.entity.Member">
 		select * from member_table
 		where memberID=#{memberID}
@@ -10,46 +29,53 @@
 	<insert id="register" parameterType="kr.bit.entity.Member">
 		insert into member_security
 		(memberIdx,memberID,memberPw,memberName,memberAge,
-		 memberGender,memberEmail,memberProfile)
+		memberGender,memberEmail,memberProfile)
 		values((select
-					IFNULL(max(memberIdx)+1,1) from member_security mem),
-			   #{memberID},#{memberPw},#{memberName},
-			   #{memberAge},#{memberGender},#{memberEmail},#{memberProfile})
+		IFNULL(max(memberIdx)+1,1) from member_security mem),
+		#{memberID},#{memberPw},#{memberName},
+		#{memberAge},#{memberGender},#{memberEmail},#{memberProfile})
 	</insert>
 
-	<select id="memberLogin" parameterType="kr.bit.entity.Member"
-			resultType="kr.bit.entity.Member">
-		select * from member_table where memberID=#{memberID} and
-			memberPw=#{memberPw}
-	</select>
+	<select id="memberLogin" 
+                        resultMap="memberMap">
+
+       select * from member_security mem LEFT OUTER JOIN member_auth auth on
+       mem.memberID=auth.memberID where mem.memberID=#{username}
+
+   </select>
 
 	<update id="memberUpdate" parameterType="kr.bit.entity.Member">
-		update member_table
+		update member_security
 		set
-			memberPw=#{memberPw}, memberName=#{memberName},
-			memberAge=#{memberAge}, memberGender=#{memberGender},
-			memberEmail=#{memberEmail}
+		memberPw=#{memberPw}, memberName=#{memberName},
+		memberAge=#{memberAge}, memberGender=#{memberGender},
+		memberEmail=#{memberEmail}
 		where memberID=#{memberID}
 	</update>
 
-	<select id="getMember" resultType="memberMap">
+	<select id="getMember" resultMap="memberMap">
 		select *from member_security
-						 mem
-						 left outer join member_auth auth
-										 on mem.memberID=auth.memberID
-		where mem.memberID=#{memberID}
+		mem
+		left outer join member_auth auth
+		on mem.memberID=auth.memberID
+		where
+		mem.memberID=#{memberID}
 	</select>
 
 	<update id="memberProfileUpdate"
-			parameterType="kr.bit.entity.Member">
-		update member_table set memberProfile=#{memberProfile}
+		parameterType="kr.bit.entity.Member">
+		update member_security set memberProfile=#{memberProfile}
 		where memberID=#{memberID}
 	</update>
 
 	<insert id="authInsert" parameterType="kr.bit.entity.MemberAuth">
 		insert into
-			member_auth(memberID,auth) values (#{memberID},#{auth})
+		member_auth(memberID,auth) values (#{memberID},#{auth})
 	</insert>
+	
+	<delete id="authDelete">
+		delete from member_auth where memberID=#{memberID}
+	</delete>
 
 </mapper>
 

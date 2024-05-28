@@ -8,8 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,7 +25,9 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import kr.bit.entity.Member;
 import kr.bit.entity.MemberAuth;
+import kr.bit.entity.MemberUser;
 import kr.bit.mapper.MemberMapper;
+import kr.bit.security.MemberUserDetailsService;
 
 @Controller
 public class MemberController {
@@ -31,6 +38,9 @@ public class MemberController {
 	
 	@Autowired
 	PasswordEncoder	passwordEncoder;
+	
+	@Autowired
+	MemberUserDetailsService memberUserDetailsService;
 
 	@RequestMapping("/memberJoin")
 	public String memberJoin() {
@@ -69,12 +79,12 @@ public class MemberController {
 			return "redirect:/memberJoin";
 		}
 
-		
+		member.setMemberProfile(""); //사진 없음
+
 		String enPw=passwordEncoder.encode(member.getMemberPw());
 		member.setMemberPw(enPw);
 		
 		int result = memberMapper.register(member); // db에 회원정보 삽입
-		member.setMemberProfile("");
 		
 		if (result == 1) { // 1행 추가됨-> insert 성공 되면
 			//회원권한을 저장해야함
@@ -89,13 +99,8 @@ public class MemberController {
 			}
 			rttr.addFlashAttribute("msg1", "성공");
 			rttr.addFlashAttribute("msg2", "회원가입에 성공했습니다");
-			
-			//회원정보(member_security)+권한정보(member_auth)..
-			
 
-			session.setAttribute("memberVo", member);
-
-			return "redirect:/";
+			return "redirect:/memberLoginForm"; //회원가입 성공 후 바로 로그인폼 뜨게끔
 		} else {
 			rttr.addFlashAttribute("msg1", "실패");
 			rttr.addFlashAttribute("msg2", "회원가입에 실패했습니다");
@@ -104,44 +109,10 @@ public class MemberController {
 		}
 	}
 
+	//로그인 화면으로 이동->시큐리티
 	@RequestMapping("/memberLoginForm")
 	public String memberLoginForm() {
 		return "member/memberLoginForm";
-	}
-
-	@RequestMapping("/memberLogout")
-	public String memberLogout(HttpSession session) {
-		session.invalidate();
-		return "redirect:/";
-	}
-
-	@RequestMapping("/memberLogin")
-	public String memberLogin(Member member, RedirectAttributes rttr, HttpSession session) {
-
-		if (member.getMemberID().equals("") || member.getMemberPw().equals("")) {
-
-			rttr.addFlashAttribute("msg1", "실패");
-			rttr.addFlashAttribute("msg2", "아이디나 비밀번호를 입력하세요");
-
-			return "redirect:memberLoginForm/";
-		}
-
-		Member memberVo = memberMapper.memberLogin(member);
-		// id와 pw가 일치할경우 회원정보들을 memberVo에 저장
-
-		if (memberVo != null) {
-			rttr.addFlashAttribute("msg1", "성공");
-			rttr.addFlashAttribute("msg2", "로그인 되었습니다");
-
-			session.setAttribute("memberVo", memberVo);
-
-			return "redirect:/";
-		} else {
-
-			rttr.addFlashAttribute("msg1", "실패");
-			rttr.addFlashAttribute("msg2", "로그인 다시 하세요");
-			return "redirect:memberLoginForm/";
-		}
 	}
 
 	@RequestMapping("/memberUpdateForm")
@@ -169,19 +140,40 @@ public class MemberController {
 
 			return "redirect:/memberUpdateForm";
 		}
+		
+		String enPw=passwordEncoder.encode(member.getMemberPw());
+		member.setMemberPw(enPw);
 
 		int result = memberMapper.memberUpdate(member);
-
+		//수정할때
 		if (result == 1) {
+			//기존에 줬던 권한 삭제하고 
+			memberMapper.authDelete(member.getMemberID());
+			
+			//새로운 권한 삽입
+			List<MemberAuth> list=member.getAuthLi();
+			for(MemberAuth mem : list) {
+				if(mem.getAuth()!=null) {  //권한 선택이 되어있다면
+					MemberAuth memberAuth=new MemberAuth();
+					memberAuth.setMemberID(member.getMemberID());
+					memberAuth.setAuth(mem.getAuth());
+					memberMapper.authInsert(memberAuth);
+				}
+			}
+		
 			rttr.addFlashAttribute("msg1", "성공");
 			rttr.addFlashAttribute("msg2", "회원 수정에 성공했습니다");
 
-			//회원정보 수정을 한 후 다시 회원정보를 가져와서 세팅해줘야한다.
-			//session에 담은 객체에 사진이 안담겨있는 상태이므로 
-			Member memberVo=memberMapper.getMember(member.getMemberID());
-			session.setAttribute("memberVo", memberVo);
-			// 수정된 데이터들을 세션영역 memberVo에 담아서 redirect로 화면이동
-
+			
+			//=>회원정보 변경 후 세션 재설정 
+			
+			//SecurityContext에 들어있음
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			MemberUser memberUser = (MemberUser) authentication.getPrincipal();
+			//principal: "누구"에 해당하는 정보 -> 객체타입은 UserDetails :pw,id,auth
+			SecurityContextHolder.getContext().setAuthentication
+			(createAuth(authentication,memberUser.getMember().getMemberID()));
+			
 			return "redirect:/";
 		} else { // 수정 실패했을 때
 			rttr.addFlashAttribute("msg1", "실패");
@@ -204,8 +196,15 @@ public class MemberController {
 		int maxSize=40*1024*1024;
 		String savePath=request.getRealPath("resources/upload");
 		
-		multi=new MultipartRequest(request, savePath, maxSize, "UTF-8",
+		try {
+			multi=new MultipartRequest(request, savePath, maxSize, "UTF-8",
 					                  new DefaultFileRenamePolicy());
+		}
+		catch(Exception e) {
+			rttr.addFlashAttribute("msg1","실패");
+			rttr.addFlashAttribute("msg2","파일크기 10MB 넘었다");
+			return "redirect:/memberImageForm";
+		}
 		
 		String memberID=multi.getParameter("memberID"); //클라이언트에서 넘김 memberID값 받음
 		
@@ -219,8 +218,7 @@ public class MemberController {
 			
 			if(str.equals("PNG") || str.equals("GIF") || str.equals("JPG")) {
 				String origin=memberMapper.getMember(memberID).getMemberProfile();
-				System.out.println(origin);
-				                  //resources/upload/.../...
+			
 				File file1=new File(savePath+"/"+origin);
 				
 				if(file1.exists()) {
@@ -245,13 +243,35 @@ public class MemberController {
 		member.setMemberProfile(newProfile);
 		memberMapper.memberProfileUpdate(member); //id기준으로 사진업데이트 됨
 		
-		Member m=memberMapper.getMember(memberID);
 		
-		session.setAttribute("memberVo", m);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		MemberUser memberUser = (MemberUser) authentication.getPrincipal();
+		//principal: "누구"에 해당하는 정보 -> 객체타입은 UserDetails :pw,id,auth
+		SecurityContextHolder.getContext().setAuthentication
+		(createAuth(authentication,memberUser.getMember().getMemberID()));
 		
 		rttr.addFlashAttribute("msg1", "성공");
 		rttr.addFlashAttribute("msg2", "업로드 되었습니다");
 	
 		return "redirect:/";
 	}
+	
+	//새로운 세션 생성 메서드로
+	//UsernamePasswordAuthenticationToken 에 회원정보+권한정보 담겨있다
+	protected Authentication createAuth(Authentication authentication, String username) {
+		
+		UserDetails userDetails=memberUserDetailsService.loadUserByUsername(username);
+		UsernamePasswordAuthenticationToken newAuth=
+				new UsernamePasswordAuthenticationToken(userDetails, 
+						authentication.getCredentials(), userDetails.getAuthorities());
+		
+		return newAuth;
+	}
+
+	
+	@GetMapping("/access-denied")
+	public String access_denied(){
+		return "access-denied";
+	}
+
 }

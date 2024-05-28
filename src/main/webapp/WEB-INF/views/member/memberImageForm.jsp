@@ -2,6 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="root" value="${pageContext.request.contextPath }" />
+<c:set var="memberVo"
+	value="${SPRING_SECURITY_CONTEXT.authentication.principal }" />
+<c:set var="auth"
+	value="${SPRING_SECURITY_CONTEXT.authentication.authorities }" />
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,11 +35,11 @@ $(document).ready(function(){
 			<div class="panel-heading">사진 등록</div>
 			<div class="panel-body">
 				<form action="${root }/memberImageUpdate?${_csrf.parameterName}=${_csrf.token}" method="post" enctype="multipart/form-data">
-					<input type="hidden" name="memberID" value="${memberVo.memberID }">
+					<input type="hidden" name="memberID" value="${memberVo.member.memberID }">
 					<table class='table table-bordered' style="text-align: center;">
 						<tr>
 							<td style="width: 100px; vertical-align: middle;">아이디</td>
-							<td>${memberVo.memberID }</td>
+							<td>${memberVo.member.memberID }</td>
 						</tr>
 
 						<tr>

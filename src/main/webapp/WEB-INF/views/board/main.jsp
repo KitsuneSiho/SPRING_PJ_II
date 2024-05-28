@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="security"
+	uri="http://www.springframework.org/security/tags"%>
+<c:set var="root" value="${pageContext.request.contextPath }" />
+<c:set var="memberVo"
+	value="${SPRING_SECURITY_CONTEXT.authentication.principal }" />
+<c:set var="auth"
+	value="${SPRING_SECURITY_CONTEXT.authentication.authorities }" />
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,7 +66,7 @@ var csrfTokenValue = "${_csrf.token}";
 							li += "<td colspan='4'>";
 							li += "<textarea id='ta"+obj.idx+"' readonly rows='7' class='form-control'></textarea>";
 							
-							if("${memberVo.memberID}" == obj.memberID){
+							if("${memberVo.member.memberID}" == obj.memberID){
 							
 								li += "<br/>";
 								li += "<span id='up"+obj.idx+"'><button class='btn btn-success btn-sm' onclick='goUpdateForm("
@@ -83,7 +90,7 @@ var csrfTokenValue = "${_csrf.token}";
 						});
 		
 		//로그인이 안되어있으면 글작성버튼이 안보임
-		if(${!empty memberVo}){  
+		if(${!empty memberVo.member}){  
 			li += "<tr>";
 			li += "<td colspan='5'>";
 			li += "<button class='btn btn-primary btn-sm' onclick='getForm()'>글작성</button>";
@@ -230,7 +237,7 @@ var csrfTokenValue = "${_csrf.token}";
 			<div class="panel-body" id="view">본문</div>
 			<div class="panel-body" id="wfrom">
 				<form id="frm">
-				<input type="hidden" name="memberID" value="${memberVo.memberID }"/>
+				<input type="hidden" name="memberID" id="memberID" value="${memberVo.member.memberID }"/>
 					<table class="table">
 						<tr>
 							<td>제목</td>
@@ -245,7 +252,7 @@ var csrfTokenValue = "${_csrf.token}";
 						<tr>
 							<td>글쓴이</td>
 							<td><input type="text" id="writer" name="writer"
-								class="form-control" value=${memberVo.memberName } 
+								class="form-control" value="${memberVo.member.memberName }" 
 								readonly="readonly"/></td>
 						</tr>
 						<tr>

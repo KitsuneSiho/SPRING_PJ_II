@@ -1,7 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="security"
+	uri="http://www.springframework.org/security/tags"%>
 <c:set var="root" value="${pageContext.request.contextPath }" />
+<c:set var="memberVo"
+	value="${SPRING_SECURITY_CONTEXT.authentication.principal }" />
+<c:set var="auth"
+	value="${SPRING_SECURITY_CONTEXT.authentication.authorities }" />
+	
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,12 +63,12 @@ function goUpdate(){
 			<div class="panel-heading">회원정보 수정</div>
 			<div class="panel-body">
 				<form name="frm" action="${root }/memberUpdate" method="post">
-					<input type="hidden" id="memberID" name="memberID" value="${memberVo.memberID }" />	
+					<input type="hidden" id="memberID" name="memberID" value="${memberVo.member.memberID }" />	
 					<input type="hidden" id="memberPw" name="memberPw" value="" />
 					<table class='table table-bordered' style="text-align: center;">
 						<tr>
 							<td style="width: 100px; vertical-align: middle;">아이디</td>
-							<td>${memberVo.memberID }</td>
+							<td>${memberVo.member.memberID }</td>
 						</tr>
 
 						<tr>
@@ -85,7 +92,7 @@ function goUpdate(){
 							</td>
 							<td colspan="2"><input class="form-control" type="text"
 								id="memberName" name="memberName" placeholder="이름을 확인"
-								value=${memberVo.memberName } /></td>
+								value=${memberVo.member.memberName } /></td>
 						</tr>
 
 						<tr>
@@ -93,7 +100,7 @@ function goUpdate(){
 							<td colspan="2"><input id="memberAge" name="memberAge"
 								class="form-control" type="number" maxlength="10"
 								placeholder="나이를 입력하세요."
-								value=${memberVo.memberAge } /></td>
+								value=${memberVo.member.memberAge } /></td>
 						</tr>
 
 						<tr>
@@ -104,12 +111,12 @@ function goUpdate(){
 							
 									<input type="radio" name="memberGender" autocomplete="off"
 										value="남자" 
-										<c:if test="${memberVo.memberGender eq '남자'}">checked</c:if> />남자
+										<c:if test="${memberVo.member.memberGender eq '남자'}">checked</c:if> />남자
 								
 										
 										<input type="radio"
 										name="memberGender" autocomplete="off" value="여자" 
-										<c:if test="${memberVo.memberGender eq '여자'}">checked</c:if> />여자
+										<c:if test="${memberVo.member.memberGender eq '여자'}">checked</c:if> />여자
 								</div>
 								</div>
 							</td>
@@ -119,7 +126,32 @@ function goUpdate(){
 							<td style="width: 100px; vertical-align: middle;">이메일</td>
 							<td colspan="2"><input id="memberEmail" name="memberEmail"
 								class="form-control" type="text" maxlength="20"
-								placeholder="이메일을 입력하세요." value="${memberVo.memberEmail }"/></td>
+								placeholder="이메일을 입력하세요." value="${memberVo.member.memberEmail }"/></td>
+						</tr>
+						
+						<!-- 선택한 권한값 출력 -->
+						<tr>
+							<td style="width: 100px; vertical-align: middle;">권한</td>
+							<td colspan="2"><input type="checkbox" name="authLi[0].auth"
+							value="ROLE_USER"
+							<security:authorize access="hasRole('ROLE_USER')">
+								checked
+							</security:authorize>/>일반회원
+							
+							
+							<input type="checkbox" name="authLi[1].auth"
+							value="ROLE_MANAGER"
+							<security:authorize access="hasRole('ROLE_MANAGER')">
+								checked
+							</security:authorize>/>매니저
+							
+							
+							<input type="checkbox" name="authLi[2].auth"
+							value="ROLE_ADMIN"
+							<security:authorize access="hasRole('ROLE_ADMIN')">
+								checked
+							</security:authorize>/>관리자
+							</td>
 						</tr>
 
 						<tr>

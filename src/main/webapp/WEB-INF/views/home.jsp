@@ -28,24 +28,13 @@ $(document).ready(function(){
 	<div class="container">
 		<jsp:include page="include/top.jsp" />
 		<c:if test="${empty memberVo }">
-			<h3>Spring Legacy</h3>
+			<h3>Spring Legacy Board</h3>
 		</c:if>
 
-		<%-- <c:if test="${!empty memberVo }">
-			<c:if test="${memberVo.memberProfile eq '' }">
-				<img src="${root }/resources/images/짱구.jpg"
-					style="width: 50px; height: 50px;" />
-			</c:if>
-			<c:if test="${memberVo.memberProfile ne '' }">
-				<img src="${root }/resources/upload/${memberVo.memberProfile}"
-					style="width: 50px; height: 50px;" />
-			</c:if>
-			<h3>${memberVo.memberName }님 환영합니다!</h3>
-		</c:if> --%>
 		<div class="panel panel-default">
 			<div>
-				<img src="${root }/resources/images/dog.jpg"
-					style="width: 100%; height: 500px;">
+				<img src="${root }/resources/images/spring.png"
+					style="width: 100%; height: 500px; border-radius: 25px; border: none;">
 			</div>
 
 			<div class="panel-body">

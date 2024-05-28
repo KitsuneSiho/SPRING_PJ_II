@@ -15,9 +15,15 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+	if(${param.error!=null}){ //시큐리티 내부에서 error전달받아 처리함
+		$("#msgType").attr("class","modal-content panel-warning");
+		$(".modal-body").text('아이디 또는 비번을 확인해주세요');
+		$(".modal-header").text('실패');
+		$("#failModal").modal("show");
+	}
 	
 	if(${!empty msg1}){
-		$("#msgType").attr("class","modal-content panel-warning");
+		$("#msgType").attr("class","modal-content panel-success");
 		$("#failModal").modal("show");
 	}	
 });
@@ -35,14 +41,14 @@ $(document).ready(function(){
 						<tr>
 							<td style="width: 100px; vertical-align: middle;">아이디</td>
 							<td><input type="text" class="form-control" id="memberID"
-								name="memberID" placeholder="아이디 입력" /></td>
+								name="username" placeholder="아이디 입력" /></td>
 						</tr>
 
 						<tr>
 							<td style="width: 100px; vertical-align: middle;" />비밀번호
 							</td>
 							<td colspan="2"><input class="form-control" type="password"
-								id="memberPw" name="memberPw" placeholder="비밀번호를 입력" /></td>
+								id="memberPw" name="password" placeholder="비밀번호를 입력" /></td>
 						</tr>
 
 						<tr>
